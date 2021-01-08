@@ -1,0 +1,253 @@
+{
+  "name": "stocks-ticker",
+  "displayName": "Stocks Ticker",
+  "description": "A price ticker for your favourite stocks",
+  "version": "0.0.1",
+  "publisher": "piyush-bhatt",
+  "author": {
+    "name": "Piyush Bhatt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/piyush-bhatt/stocks-ticker"
+  },
+  "bugs": {
+    "url": "https://github.com/piyush-bhatt/stocks-ticker/issues"
+  },
+  "homepage": "https://github.com/piyush-bhatt/stocks-ticker#readme",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.52.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "colors": [
+      {
+        "id": "stocksTicker.watchlist.gain",
+        "description": "Arrow color for gain in Stocks watchlist",
+        "defaults": {
+          "dark": "#6cb33f",
+          "light": "#6cb33f",
+          "highContrast": "#6cb33f"
+        }
+      },
+      {
+        "id": "stocksTicker.watchlist.loss",
+        "description": "Arrow color for loss in Stocks watchlist",
+        "defaults": {
+          "dark": "#fd6e70",
+          "light": "#fd6e70",
+          "highContrast": "#fd6e70"
+        }
+      },
+      {
+        "id": "stocksTicker.statusBar.gain",
+        "description": "Arrow color for gain in Stocks status bar item",
+        "defaults": {
+          "dark": "#00ff00",
+          "light": "#6cb33f",
+          "highContrast": "#00ff00"
+        }
+      },
+      {
+        "id": "stocksTicker.statusBar.loss",
+        "description": "Arrow color for loss in Stocks status bar item",
+        "defaults": {
+          "dark": "#fd6e70",
+          "light": "#fd6e70",
+          "highContrast": "#f72626"
+        }
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Stocks Ticker",
+        "properties": {
+          "stocksTicker.differenceView": {
+            "type": "string",
+            "default": "amount",
+            "enum": [
+              "amount",
+              "percentage"
+            ],
+            "enumDescriptions": [
+              "Shows the difference from previous day closing in amount",
+              "Shows the difference from previous day closing in percentage"
+            ]
+          },
+          "stocksTicker.watchlist": {
+            "type": "array",
+            "default": [],
+            "description": "Stocks added to watchlist"
+          },
+          "stocksTicker.favourites": {
+            "type": "array",
+            "default": [],
+            "description": "Stocks marked as favourites"
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "stocksTicker.watchlist.addEntry",
+        "title": "Stocks Ticker: Add Stock",
+        "icon": "$(add)"
+      },
+      {
+        "command": "stocksTicker.watchlist.configure",
+        "title": "Stocks Ticker: Configure Difference View",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "stocksTicker.watchlist.refreshAll",
+        "title": "Stocks Ticker: Refresh All",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "stocksTicker.watchlist.refreshEntry",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "stocksTicker.watchlist.removeEntry",
+        "title": "Remove from Watchlist",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "stocksTicker.watchlist.markFavourite",
+        "title": "Mark as Favourite",
+        "icon": "$(star-empty)"
+      },
+      {
+        "command": "stocksTicker.watchlist.unmarkFavourite",
+        "title": "Unmark Favourite",
+        "icon": "$(star-full)"
+      }
+    ],
+    "commandPalette": [
+      {
+        "command": "stocksTicker.watchlist.removeEntry",
+        "when": "false"
+      },
+      {
+        "command": "stocksTicker.watchlist.refreshEntry",
+        "when": "false"
+      },
+      {
+        "command": "stocksTicker.watchlist.markFavourite",
+        "when": "false"
+      },
+      {
+        "command": "stocksTicker.watchlist.unmarkFavourite",
+        "when": "false"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "stocksTicker",
+          "title": "Stocks Ticker",
+          "icon": "$(output)"
+        }
+      ]
+    },
+    "views": {
+      "stocksTicker": [
+        {
+          "type": "tree",
+          "id": "stocksTicker.watchlist",
+          "name": "Watchlist"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "stocksTicker.watchlist",
+        "contents": "No stock added to watchlist.\n[Add Stock to Watchlist](command:stocksTicker.watchlist.addEntry)",
+        "when": "config.stocksTicker.watchlist == []"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "stocksTicker.watchlist.addEntry",
+          "when": "view == stocksTicker.watchlist",
+          "group": "navigation@0"
+        },
+        {
+          "command": "stocksTicker.watchlist.configure",
+          "when": "view == stocksTicker.watchlist",
+          "group": "navigation@1"
+        },
+        {
+          "command": "stocksTicker.watchlist.refreshAll",
+          "when": "view == stocksTicker.watchlist",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "stocksTicker.watchlist.refreshEntry",
+          "when": "viewItem == stock || viewItem == stock+favourite",
+          "group": "inline@1"
+        },
+        {
+          "command": "stocksTicker.watchlist.markFavourite",
+          "when": "view == stocksTicker.watchlist && viewItem == stock",
+          "group": "inline@0"
+        },
+        {
+          "command": "stocksTicker.watchlist.unmarkFavourite",
+          "when": "view == stocksTicker.watchlist && viewItem == stock+favourite",
+          "group": "inline@0"
+        },
+        {
+          "command": "stocksTicker.watchlist.removeEntry",
+          "when": "viewItem == stock || viewItem == stock+favourite",
+          "group": "inline@2"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.52.0",
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.27",
+    "eslint": "^7.6.0",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.0.1",
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.4.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "printWidth": 120,
+    "endOfLine": "auto",
+    "formatOnSave": true
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "yahoo-finance": "^0.3.6",
+    "yahoo-finance-ticker": "^1.0.3"
+  }
+}

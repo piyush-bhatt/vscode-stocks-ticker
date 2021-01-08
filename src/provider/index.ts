@@ -1,0 +1,1 @@
+export { WatchlistProvider } from './watchlistProvider';
