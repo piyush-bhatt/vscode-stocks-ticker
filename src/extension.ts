@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
+import { setContext } from './context';
 import { StockTreeItem } from './model';
 import { WatchlistProvider } from './provider';
-import { openConfigureQuickPick, openStockPicker } from './quickPick';
+import { openConfigureQuickPick, openMultiStepInput, openStockPicker } from './input';
 import { createStatusBarItem, removeStatusBarItem, updateStatusBarItem } from './statusBar';
 import {
   removeEntryFromWatchlist,
@@ -10,9 +11,12 @@ import {
   getFavourites,
   addToFavourites,
   removeFromFavourites,
+  addOrUpdateNotification,
+  notifyIfNeeded,
 } from './utils';
 
 export function activate(context: vscode.ExtensionContext) {
+  setContext(context);
   const watchlistProvider = new WatchlistProvider();
   let disposables: vscode.Disposable[] = [];
   disposables.push(vscode.window.registerTreeDataProvider('stocksTicker.watchlist', watchlistProvider));
@@ -27,6 +31,11 @@ export function activate(context: vscode.ExtensionContext) {
     }),
   );
   disposables.push(
+    vscode.commands.registerCommand('stocksTicker.watchlist.refresh', () => {
+      watchlistEventEmitter.emit('refresh');
+    }),
+  );
+  disposables.push(
     vscode.commands.registerCommand('stocksTicker.watchlist.removeEntry', async (stock: StockTreeItem) => {
       await removeEntryFromWatchlist(`${stock.exchange}:${stock.symbol}.${stock.suffix}`);
       removeFromFavourites(`${stock.exchange}:${stock.symbol}`);
@@ -35,17 +44,26 @@ export function activate(context: vscode.ExtensionContext) {
     }),
   );
   disposables.push(
-    vscode.commands.registerCommand('stocksTicker.watchlist.markFavourite', (stock: StockTreeItem) => {
-      addToFavourites(`${stock.exchange}:${stock.symbol}`);
+    vscode.commands.registerCommand('stocksTicker.watchlist.markFavourite', async (stock: StockTreeItem) => {
+      await addToFavourites(`${stock.exchange}:${stock.symbol}`);
       createStatusBarItem(`${stock.exchange}:${stock.symbol}`, stock.price, stock.change, stock.changePercent);
       watchlistProvider.refresh();
     }),
   );
   disposables.push(
-    vscode.commands.registerCommand('stocksTicker.watchlist.unmarkFavourite', (stock: StockTreeItem) => {
-      removeFromFavourites(`${stock.exchange}:${stock.symbol}`);
+    vscode.commands.registerCommand('stocksTicker.watchlist.unmarkFavourite', async (stock: StockTreeItem) => {
+      await removeFromFavourites(`${stock.exchange}:${stock.symbol}`);
       removeStatusBarItem(`${stock.exchange}:${stock.symbol}`);
       watchlistProvider.refresh();
+    }),
+  );
+  disposables.push(
+    vscode.commands.registerCommand('stocksTicker.watchlist.notification', async (stock: StockTreeItem) => {
+      const notificationInputState = await openMultiStepInput(`${stock.exchange}:${stock.symbol}`);
+      if (notificationInputState !== undefined) {
+        addOrUpdateNotification(notificationInputState);
+      }
+      // watchlistProvider.refresh();
     }),
   );
   watchlistEventEmitter.on('refresh', () => {
@@ -58,6 +76,7 @@ export function activate(context: vscode.ExtensionContext) {
       watchlistProvider.refreshPrice(id, price, change, changePercent);
       const symbol = id.split('.')[0];
       updateStatusBarItem(`${exchange}:${symbol}`, price, change, changePercent);
+      notifyIfNeeded(`${exchange}:${symbol}`, price);
     },
   );
   const favourites = getFavourites();

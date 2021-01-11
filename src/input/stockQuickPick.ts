@@ -16,7 +16,10 @@ export const openStockPicker = async () => {
     stockQuickPick.busy = true;
     const res = await searchSymbol(value);
     if (res.status == 200 && res.data.status == 'ok') {
-      let data = res.data.data;
+      let data = res.data.data.filter(
+        (v: any, i: number, a: any) =>
+          a.findIndex((t: any) => t.symbol === v.symbol && t.exchange === v.exchange && t.country === v.country) === i,
+      );
       const supportedIndices = getSupportedIndices();
       data = data
         .map((item: any) => {
@@ -40,5 +43,6 @@ export const openStockPicker = async () => {
       watchlistEventEmitter.emit('refresh');
     }
   });
+  stockQuickPick.onDidHide(() => stockQuickPick.dispose());
   stockQuickPick.show();
 };
