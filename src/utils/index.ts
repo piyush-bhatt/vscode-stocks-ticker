@@ -7,6 +7,7 @@ export {
   getWatchlist,
   addEntryToWatchlist,
   removeEntryFromWatchlist,
+  refreshEntryInWatchlist,
   getNotifications,
   addOrUpdateNotification,
   isValidNotificationInputState,
@@ -17,6 +18,7 @@ export {
   getAlertSoundList,
   notifyIfNeeded,
   playSound,
+  showInformationMessage,
   watchlistEventEmitter,
   tickerEventEmitter,
 } from './utils';

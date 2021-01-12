@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { setContext } from './context';
 import { StockTreeItem } from './model';
 import { WatchlistProvider } from './provider';
-import { openConfigureQuickPick, openMultiStepInput, openStockPicker } from './input';
+import { openConfigureQuickPick, openMultiStepInput, openStockPicker, openStockPickerForPriceQuote } from './input';
 import { createStatusBarItem, removeStatusBarItem, updateStatusBarItem } from './statusBar';
 import {
   removeEntryFromWatchlist,
@@ -13,7 +13,7 @@ import {
   removeFromFavourites,
   addOrUpdateNotification,
   notifyIfNeeded,
-  fetchQuote,
+  refreshEntryInWatchlist,
 } from './utils';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -21,6 +21,11 @@ export function activate(context: vscode.ExtensionContext) {
   const watchlistProvider = new WatchlistProvider();
   let disposables: vscode.Disposable[] = [];
   disposables.push(vscode.window.registerTreeDataProvider('stocksTicker.watchlist', watchlistProvider));
+  disposables.push(
+    vscode.commands.registerCommand('stocksTicker.priceQuote', () => {
+      openStockPickerForPriceQuote();
+    }),
+  );
   disposables.push(
     vscode.commands.registerCommand('stocksTicker.watchlist.configure', async () => {
       openConfigureQuickPick();
@@ -38,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
   disposables.push(
     vscode.commands.registerCommand('stocksTicker.watchlist.refreshEntry', async (stock: StockTreeItem) => {
-      fetchQuote(`${stock.symbol}.${stock.suffix}`);
+      refreshEntryInWatchlist(`${stock.symbol}.${stock.suffix}`);
     }),
   );
   disposables.push(
@@ -80,6 +85,9 @@ export function activate(context: vscode.ExtensionContext) {
     'refreshPrice',
     (id: string, exchange: string, price: number, change: number, changePercent: number) => {
       if (id !== undefined) {
+        if (id.split('.')[1] === undefined) {
+          id += '.';
+        }
         watchlistProvider.refreshPrice(id, price, change, changePercent);
         const symbol = id.split('.')[0];
         updateStatusBarItem(`${exchange}:${symbol}`, price, change, changePercent);

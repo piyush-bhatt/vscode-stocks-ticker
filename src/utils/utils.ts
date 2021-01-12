@@ -5,6 +5,7 @@ const player = require('play-sound')({});
 import { INDICES_SUFFIX } from '../constants';
 import { getContext } from '../context';
 import { INotification, INotificationInputState } from '../types';
+import { fetchQuote } from './api';
 const EventEmitter = require('events');
 
 export const roundToDecimal = (num: number) => {
@@ -55,6 +56,20 @@ export const removeEntryFromWatchlist = async (value: string): Promise<void> => 
   await vscode.workspace
     .getConfiguration()
     .update('stocksTicker.watchlist', watchlist, vscode.ConfigurationTarget.Global);
+};
+
+export const refreshEntryInWatchlist = async (symbol: string) => {
+  const quote = await fetchQuote(symbol);
+  if (quote !== undefined) {
+    tickerEventEmitter.emit(
+      'refreshPrice',
+      quote.price.symbol,
+      quote.price.exchangeName,
+      roundToDecimal(quote.price.regularMarketPrice),
+      roundToDecimal(quote.price.regularMarketChange),
+      roundToDecimal(quote.price.regularMarketChangePercent),
+    );
+  }
 };
 
 export const getNotifications = (): INotification[] =>
@@ -173,7 +188,7 @@ export const notifyIfNeeded = (symbol: string, price: number): void => {
   });
 };
 
-const showInformationMessage = (message: string) => {
+export const showInformationMessage = (message: string) => {
   vscode.window.showInformationMessage(message);
 };
 
