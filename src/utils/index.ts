@@ -16,6 +16,7 @@ export {
   roundToDecimal,
   getAlertSoundList,
   notifyIfNeeded,
+  playSound,
   watchlistEventEmitter,
   tickerEventEmitter,
 } from './utils';

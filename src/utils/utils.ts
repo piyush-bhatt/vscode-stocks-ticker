@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { audioPlayer } from '../audioPlayer';
+import cp = require('child_process');
+const player = require('play-sound')({});
 import { INDICES_SUFFIX } from '../constants';
 import { getContext } from '../context';
 import { INotification, INotificationInputState } from '../types';
@@ -9,11 +10,6 @@ const EventEmitter = require('events');
 export const roundToDecimal = (num: number) => {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 };
-
-// export const getAPIKey = (): string => vscode.workspace.getConfiguration('stocksTicker').get('apiKey', '');
-
-// export const setAPIKey = (apiKey: string): Thenable<void> =>
-//   vscode.workspace.getConfiguration().update('stocksTicker.apiKey', apiKey, vscode.ConfigurationTarget.Global);
 
 export const getDifferenceViewOption = (): string =>
   vscode.workspace.getConfiguration('stocksTicker').get('differenceView', '');
@@ -163,7 +159,7 @@ export const notifyIfNeeded = (symbol: string, price: number): void => {
       notification.alertSound !== 'None'
     ) {
       removeNotification(symbol, notification.targetPrice, notification.limit);
-      audioPlayer.playNotificationSound(notification.alertSound);
+      playSound(notification.alertSound);
       showInformationMessage(`${symbol} price reached ${price}`);
     } else if (
       notification.limit === 'Lower' &&
@@ -171,7 +167,7 @@ export const notifyIfNeeded = (symbol: string, price: number): void => {
       notification.alertSound !== 'None'
     ) {
       removeNotification(symbol, notification.targetPrice, notification.limit);
-      audioPlayer.playNotificationSound(notification.alertSound);
+      playSound(notification.alertSound);
       showInformationMessage(`${symbol} price reached ${price}`);
     }
   });
@@ -179,6 +175,16 @@ export const notifyIfNeeded = (symbol: string, price: number): void => {
 
 const showInformationMessage = (message: string) => {
   vscode.window.showInformationMessage(message);
+};
+
+export const playSound = (sound: string): void => {
+  const soundFilePath = getContext().asAbsolutePath(`media/audio/${sound}.wav`);
+  if (process.platform === 'win32') {
+    const playExePath = getContext().asAbsolutePath('media/audio/play.exe');
+    cp.execFile(playExePath, [soundFilePath]);
+  } else {
+    player.play(soundFilePath);
+  }
 };
 
 export const watchlistEventEmitter = new EventEmitter();

@@ -1,7 +1,6 @@
 import { QuickPickItem, window, Disposable, QuickInputButton, QuickInput, QuickInputButtons, ThemeIcon } from 'vscode';
-import { audioPlayer } from '../audioPlayer';
 import { INotification, INotificationInputState } from '../types';
-import { getAlertSoundList, getNotifications, isValidNotificationInputState } from '../utils';
+import { getAlertSoundList, getNotifications, isValidNotificationInputState, playSound } from '../utils';
 
 export const openMultiStepInput = async (symbol: string): Promise<INotificationInputState | undefined> => {
   const notifications: INotification[] = getNotifications().filter((item: INotification) => item.symbol === symbol);
@@ -74,14 +73,14 @@ export const openMultiStepInput = async (symbol: string): Promise<INotificationI
       placeholder: state.prevAlertSound || '',
       items: alerts,
       activeItem: { label: state.prevAlertSound || '' },
-      onDidChangeActive: playSound,
+      onDidChangeActive: playSampleSound,
     });
     state.alertSound = alertSound.label;
   }
 
-  function playSound(item: QuickPickItem) {
+  function playSampleSound(item: QuickPickItem) {
     if (item.label !== 'None') {
-      audioPlayer.playNotificationSound(item.label);
+      playSound(item.label);
     }
   }
 
