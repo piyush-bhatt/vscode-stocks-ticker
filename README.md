@@ -13,7 +13,7 @@ Stocks Ticker is a Visual Studio Code extension, primarily focused on providing 
 ### Price Quote
 
 1. Open [**Command Palette**](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) on Visual Studio Code.
-2. Enter **Stocks Ticker: Get Price Quote**.
+2. Enter ```Stocks Ticker: Get Price Quote```.
 3. Enter the stock symbol to get price quote for.
 
 [**Here is an example**](#price-quote- 'Jump to Price Quote')
@@ -42,13 +42,13 @@ In addition to the details, following options are available for each item in the
 
 # Usage
 
-### Search a Stock Symbol in multiple supported Exchanges [#](#search-symbol- 'Search Symbol')
-
 ### Price Quote [#](#price-quote- 'Price Quote')
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/piyush-bhatt/vscode-stocks-ticker/main/media/readme/Price_Quote.gif" alt="Price Quote" />
 </p>
+
+### Search a Stock Symbol in multiple supported Exchanges [#](#search-symbol- 'Search Symbol')
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/piyush-bhatt/vscode-stocks-ticker/main/media/readme/Search_Symbol.gif" alt="Search Symbol" />
