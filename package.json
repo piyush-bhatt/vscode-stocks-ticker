@@ -1,7 +1,7 @@
 {
   "name": "stocks-ticker",
   "displayName": "Stocks Ticker",
-  "description": "A price ticker for your favourite stocks",
+  "description": "A feature-packed price ticker for your favourite stocks",
   "version": "0.0.1",
   "publisher": "piyush-bhatt",
   "author": {
@@ -27,7 +27,8 @@
     "stocks",
     "stock market",
     "ticker",
-    "prices"
+    "prices",
+    "stocks prices"
   ],
   "icon": "media/icon/icon.png",
   "activationEvents": [
