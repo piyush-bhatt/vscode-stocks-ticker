@@ -20,5 +20,5 @@ export {
   watchlistEventEmitter,
   tickerEventEmitter,
 } from './utils';
-export { searchSymbol } from './api';
+export { searchSymbol, fetchQuote } from './api';
 export { ticker } from './ticker';

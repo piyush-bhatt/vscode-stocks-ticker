@@ -13,6 +13,7 @@ import {
   removeFromFavourites,
   addOrUpdateNotification,
   notifyIfNeeded,
+  fetchQuote,
 } from './utils';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -33,6 +34,11 @@ export function activate(context: vscode.ExtensionContext) {
   disposables.push(
     vscode.commands.registerCommand('stocksTicker.watchlist.refresh', () => {
       watchlistEventEmitter.emit('refresh');
+    }),
+  );
+  disposables.push(
+    vscode.commands.registerCommand('stocksTicker.watchlist.refreshEntry', async (stock: StockTreeItem) => {
+      fetchQuote(`${stock.symbol}.${stock.suffix}`);
     }),
   );
   disposables.push(
@@ -73,10 +79,12 @@ export function activate(context: vscode.ExtensionContext) {
   tickerEventEmitter.on(
     'refreshPrice',
     (id: string, exchange: string, price: number, change: number, changePercent: number) => {
-      watchlistProvider.refreshPrice(id, price, change, changePercent);
-      const symbol = id.split('.')[0];
-      updateStatusBarItem(`${exchange}:${symbol}`, price, change, changePercent);
-      notifyIfNeeded(`${exchange}:${symbol}`, price);
+      if (id !== undefined) {
+        watchlistProvider.refreshPrice(id, price, change, changePercent);
+        const symbol = id.split('.')[0];
+        updateStatusBarItem(`${exchange}:${symbol}`, price, change, changePercent);
+        notifyIfNeeded(`${exchange}:${symbol}`, price);
+      }
     },
   );
   const favourites = getFavourites();
