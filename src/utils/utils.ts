@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import cp = require('child_process');
-const player = require('play-sound')({});
+const player = require('node-wav-player');
 import { INDICES_SUFFIX } from '../constants';
 import { getContext } from '../context';
 import { INotification, INotificationInputState } from '../types';
@@ -194,12 +194,10 @@ export const showInformationMessage = (message: string) => {
 
 export const playSound = (sound: string): void => {
   const soundFilePath = getContext().asAbsolutePath(`media/audio/${sound}.wav`);
-  if (process.platform === 'win32') {
-    const playExePath = getContext().asAbsolutePath('media/audio/play.exe');
-    cp.execFile(playExePath, [soundFilePath]);
-  } else {
-    player.play(soundFilePath);
-  }
+  player
+    .play({ path: soundFilePath })
+    .then(() => {})
+    .catch((error: any) => {});
 };
 
 export const watchlistEventEmitter = new EventEmitter();
