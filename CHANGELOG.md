@@ -2,8 +2,10 @@
 
 All notable changes to the "stocks-ticker" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 1.0.1 - 13/01/2021
 
-## [Unreleased]
+- Minor patch added
+
+## 1.0.0 - 13/01/2021
 
 - Initial release
