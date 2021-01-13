@@ -3,13 +3,13 @@
   "displayName": "Stocks Ticker",
   "description": "A feature-packed price ticker for your favourite stocks",
   "version": "1.0.0",
-  "publisher": "piyush-bhatt",
+  "publisher": "Piyush Bhatt",
   "author": {
     "name": "Piyush Bhatt"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/piyush-bhatt/stocks-ticker.git"
+    "url": "https://github.com/piyush-bhatt/stocks-ticker"
   },
   "bugs": {
     "url": "https://github.com/piyush-bhatt/stocks-ticker/issues"
