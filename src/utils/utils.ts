@@ -103,7 +103,7 @@ const addNotification = async (notification: INotification): Promise<void> => {
   }
 };
 
-const removeNotification = async (symbol: string, targetPrice: string, limit: string): Promise<void> => {
+export const removeNotification = async (symbol: string, targetPrice: string, limit: string): Promise<void> => {
   let notifications = getNotifications();
   const index = getNotificationIndex(symbol, targetPrice, limit);
   notifications.splice(index, 1);

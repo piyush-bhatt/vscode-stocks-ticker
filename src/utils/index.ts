@@ -10,6 +10,7 @@ export {
   refreshEntryInWatchlist,
   getNotifications,
   addOrUpdateNotification,
+  removeNotification,
   isValidNotificationInputState,
   getSupportedIndices,
   getTickerList,
