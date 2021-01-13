@@ -35,9 +35,15 @@ Each watchlist item shows the following details for a stock,
 In addition to the details, following options are available for each item in the watchlist,
 * **Mark as Favourite:** [**Add**](#mark-unmark-favourite- 'Jump to Mark or Unmark Favourite') the item to status bar for constant visibility.
 * **Unmark Favourite:** [**Remove**](#mark-unmark-favourite- 'Jump to Mark or Unmark Favourite') the item from status bar, if added.
-* **Notification:** [**Add**](#add-notification- 'Jump to Add Notification') a new notification/alert or [**edit**](#edit-notification- 'Jump to Edit Notification') an existing one for a specific price limit. Provides an alert sound, if selected.
+* **Notification:** [**Add**](#add-notification- 'Jump to Add Notification'), [**edit**](#edit-notification- 'Jump to Edit Notification') or [**delete**](#delete-notification- 'Jump to Delete Notification') notifications.
 * **Refresh:** Fetch the latest price quote for the stock symbol.
 * **Remove from Watchlist:** [**Remove the item**](#add-remove-item- 'Jump to Add or Remove Watchlist item') from the watchlist.
+
+### Notifications
+
+* [**Add**](#add-notification- 'Jump to Add Notification') multiple notifications for a stock symbol in the watchlist for a specific price limit. Provides option to choose an alert sound as well.
+* [**Edit**](#edit-notification- 'Jump to Edit Notification') an existing notification for a stock symbol in the watchlist to change the target price, limit or alert sound.
+* [**Delete**](#delete-notification- 'Jump to Delete Notification') a notification for a stock symbol in the watchlist.
 
 
 # Usage
@@ -82,4 +88,10 @@ In addition to the details, following options are available for each item in the
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/piyush-bhatt/vscode-stocks-ticker/main/media/readme/Edit_Notification.gif" alt="Edit Notification" />
+</p>
+
+### Delete Notification [#](#delete-notification- 'Delete Notification')
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/piyush-bhatt/vscode-stocks-ticker/main/media/readme/Delete_Notification.gif" alt="Delete Notification" />
 </p>
