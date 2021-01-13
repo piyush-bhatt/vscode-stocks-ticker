@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/piyush-bhatt/vscode-stocks-ticker/main/media/icon/icon_logo.png" alt="Stocks Ticker Logo" /></a>
 </p>
 
-> Stocks Ticker provides you a **feature rich** price ticker for your favourite stocks, built into Visual Studio Code. It helps you to **stay updated** with the prices at a glance via watchlist, **get notified** at set limits, **get price quote** for stocks from multiple exchanges, and more.
+> [Stocks Ticker](https://marketplace.visualstudio.com/items?itemName=piyush-bhatt.stocks-ticker) provides you a **feature rich** price ticker for your favourite stocks, built into Visual Studio Code. It helps you to **stay updated** with the prices at a glance via watchlist, **get notified** at set limits, **get price quote** for stocks from multiple exchanges, and more.
 
 # Stocks Ticker
 
