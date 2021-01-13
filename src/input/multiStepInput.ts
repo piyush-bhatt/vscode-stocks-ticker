@@ -27,23 +27,23 @@ export const openMultiStepInput = async (symbol: string): Promise<INotificationI
     const pick = (await input.showQuickPick({
       title: 'Add or Edit a notification',
       step: 1,
-      totalSteps: 5,
+      totalSteps: 4,
       placeholder: notifications.length === 0 ? 'Click on the + button to add a notification' : '',
       items: notifications,
       buttons: [createNotificationButton],
     })) as INotification | Button;
     if (pick instanceof Button) {
       state.symbol = symbol;
-      return (input: MultiStepInput) => setTargetPrice(input, state);
+      return (input: MultiStepInput) => setTargetPrice(input, state, 0);
     }
     state.symbol = pick.symbol;
     state.prevTargetPrice = pick.targetPrice;
     state.prevLimit = pick.limit;
     state.prevAlertSound = pick.alertSound;
-    return (input: MultiStepInput) => chooseAction(input, state);
+    return (input: MultiStepInput) => chooseAction(input, state, 1);
   }
 
-  async function chooseAction(input: MultiStepInput, state: Partial<INotificationInputState>) {
+  async function chooseAction(input: MultiStepInput, state: Partial<INotificationInputState>, additionalSteps: number) {
     const actions: QuickPickItem[] = ['Edit', 'Delete'].map((label) => ({ label }));
     const action = await input.showQuickPick({
       title: 'Choose an Action',
@@ -53,45 +53,53 @@ export const openMultiStepInput = async (symbol: string): Promise<INotificationI
       items: actions,
     });
     if (action.label == 'Edit') {
-      return (input: MultiStepInput) => setTargetPrice(input, state);
+      return (input: MultiStepInput) => setTargetPrice(input, state, additionalSteps);
     } else if (action.label == 'Delete') {
       removeNotification(state.symbol!, state.prevTargetPrice!, state.prevLimit!);
     }
   }
 
-  async function setTargetPrice(input: MultiStepInput, state: Partial<INotificationInputState>) {
+  async function setTargetPrice(
+    input: MultiStepInput,
+    state: Partial<INotificationInputState>,
+    additionalSteps: number,
+  ) {
     state.targetPrice = await input.showInputBox({
       title: 'Set Target Price',
-      step: 3,
-      totalSteps: 5,
+      step: 2 + additionalSteps,
+      totalSteps: 4 + additionalSteps,
       value: state.prevTargetPrice || '',
       prompt: '',
       validate: validateTargetPrice,
     });
-    return (input: MultiStepInput) => setLimit(input, state);
+    return (input: MultiStepInput) => setLimit(input, state, additionalSteps);
   }
 
-  async function setLimit(input: MultiStepInput, state: Partial<INotificationInputState>) {
+  async function setLimit(input: MultiStepInput, state: Partial<INotificationInputState>, additionalSteps: number) {
     const limits: QuickPickItem[] = ['Upper', 'Lower'].map((label) => ({ label }));
     const limit = await input.showQuickPick({
       title: 'Set a Limit',
-      step: 4,
-      totalSteps: 5,
+      step: 3 + additionalSteps,
+      totalSteps: 4 + additionalSteps,
       placeholder: state.prevLimit || '',
       items: limits,
       activeItem: { label: state.prevLimit || '' },
     });
     state.limit = limit.label;
-    return (input: MultiStepInput) => setAlertSound(input, state);
+    return (input: MultiStepInput) => setAlertSound(input, state, additionalSteps);
   }
 
-  async function setAlertSound(input: MultiStepInput, state: Partial<INotificationInputState>) {
+  async function setAlertSound(
+    input: MultiStepInput,
+    state: Partial<INotificationInputState>,
+    additionalSteps: number,
+  ) {
     let alerts: QuickPickItem[] = getAlertSoundList().map((label) => ({ label }));
     alerts = [{ label: 'None' }].concat(alerts);
     const alertSound = await input.showQuickPick({
       title: 'Choose an alert sound',
-      step: 5,
-      totalSteps: 5,
+      step: 4 + additionalSteps,
+      totalSteps: 4 + additionalSteps,
       placeholder: state.prevAlertSound || '',
       items: alerts,
       activeItem: { label: state.prevAlertSound || '' },
